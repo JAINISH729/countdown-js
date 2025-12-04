@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Countdown & Quotes App</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        #modal {
+            display:none;
+            position: fixed;
+            top: 0; left: 0;
+            width:100%; height:100%;
+            background: rgba(0,0,0,0.6);
+        }
+        #modalBox {
+            background:white;
+            width:300px;
+            padding:20px;
+            margin:100px auto;
+            text-align:center;
+            border-radius:10px;
+        }
+        button { margin:5px; padding:8px 15px; }
+    </style>
+</head>
+<body>
+
+<h2>🎉 Countdown Timer</h2>
+<div id="timer"></div>
+<button id="startBtn">Start</button>
+<button id="pauseBtn">Pause</button>
+
+<hr>
+
+<h2>💬 Quote Slider</h2>
+<div id="quote"></div>
+<br>
+<button id="prevBtn">Previous</button>
+<button id="nextBtn">Next</button>
+
+<hr>
+
+<div id="modal">
+    <div id="modalBox">
+        <p>Welcome to Countdown & Quotes App 🚀 — Stay motivated!</p>
+        <button id="closeModal">Close</button>
+    </div>
+</div>
+
+<script>
+
+let eventDate = new Date("Jan 1, 2026 00:00:00").getTime();
+let timerDisplay = document.getElementById("timer");
+let countdownInterval;
+
+function updateCountdown() {
+    let now = new Date().getTime();
+    let diff = eventDate - now;
+
+    if (diff <= 0) {
+        clearInterval(countdownInterval);
+        timerDisplay.innerHTML = "Time’s up! The event has started 🎉";
+        return;
+    }
+
+    let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    let mins = Math.floor((diff / (1000 * 60)) % 60);
+    let secs = Math.floor((diff / 1000) % 60);
+
+    timerDisplay.innerHTML = `${days} Days ${hours} Hours ${mins} Minutes ${secs} Seconds`;
+}
+
+document.getElementById("startBtn").onclick = () => {
+    clearInterval(countdownInterval);
+    countdownInterval = setInterval(updateCountdown, 1000);
+};
+
+document.getElementById("pauseBtn").onclick = () => {
+    clearInterval(countdownInterval);
+};
+
+countdownInterval = setInterval(updateCountdown, 1000);
+
+
+const quotes = [
+    "Success is not final, failure is not fatal.",
+    "Believe you can and you're halfway there.",
+    "Dream big and dare to fail.",
+    "Every moment is a fresh beginning.",
+    "Act as if what you do makes a difference.",
+    "Stay positive, work hard, make it happen."
+];
+
+let quoteIndex = 0;
+let quoteDisplay = document.getElementById("quote");
+let quoteInterval;
+
+function showQuote() {
+    quoteDisplay.innerHTML = `"${quotes[quoteIndex]}"`;
+}
+
+function nextQuote() {
+    quoteIndex = (quoteIndex + 1) % quotes.length;
+    showQuote();
+}
+
+function prevQuote() {
+    quoteIndex = (quoteIndex - 1 + quotes.length) % quotes.length;
+    showQuote();
+}
+
+document.getElementById("nextBtn").onclick = nextQuote;
+document.getElementById("prevBtn").onclick = prevQuote;
+
+showQuote();
+
+quoteInterval = setInterval(nextQuote, 4000);
+
+
+let modal = document.getElementById("modal");
+let closeModal = document.getElementById("closeModal");
+
+setTimeout(() => {
+    modal.style.display = "block";
+}, 5000);
+
+closeModal.onclick = () => {
+    modal.style.display = "none";
+};
+
+</script>
+
+</body>
+</html>
